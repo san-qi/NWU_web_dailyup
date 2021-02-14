@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>晨午检填报</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+    <div class="container">
+        <div class="vh-100 d-flex flex-column justify-content-around">
+            <div class="mx-auto">
+                <h2 class="text-info">西北大学晨午检</h2>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="p-1 border border-secondary rounded">
+                        <div class="carousel slide carousel-fade" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="./res/pic1.jpg" class="d-block w-100 rounded" alt="picture one">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="./res/pic2.jpg" class="d-block w-100 rounded" alt="picture two">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="./res/pic3.jpg" class="d-block w-100 rounded" alt="picture three">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+                <div class="col mt-3">
+                    <form>
+                        <div class="form-group">
+                            <label for="学号">学号</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend text-primary">
+                                    <span class="bi-person mr-2" style="font-size: 1.5rem;"></span>
+                                </div>
+                                <input type="number" class="form-control pop-msg" id="sid" placeholder="Identity"
+                                    data-toggle="popover" data-content="学号不能为空">
+                            </div>
+                            <div class="valid-tooltip">
+                                请输入你的学号
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="密码">密码</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend text-primary">
+                                    <span class="bi-flower3 mr-2" style="font-size: 1.5rem;"></span>
+                                </div>
+                                <input type="password" class="form-control pop-msg" id="psw" placeholder="Password"
+                                    data-toggle="popover" data-content="密码不能为空">
+                            </div>
+                        </div>
+                        <div class="form-check my-2">
+                            <input type="checkbox" class="form-check-input" id="remember">
+                            <label class="form-check-label" for="记住我">七天免登陆</label>
+                        </div>
+                        <div class="form-group d-flex justify-content-center invisible" id="errMsg">
+                            <small class="text-danger">用户名或密码错误</small>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="submit">
+                            登陆
+                            <span class="spinner-grow spinner-grow-sm text-danger loading" role="status" hidden></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="mx-auto">
+                <label>若你多次登陆失败，请从
+                    <a href="http://authserver.nwu.edu.cn/authserver/login"><span class="bi-link-45deg">这里</span></a>
+                    尝试，完成身份认证
+                </label>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+    <script>
+        $(function () {
+            var isLogin = function () {
+                let id = $.cookie("id");
+                let logined = $.cookie("logined");
+                if (id && logined) {
+                    $.get("./api/islogin").done(function (data) {
+                        if (data["e"] == 0) {
+                            $(location).attr("href", "./index.html");
+                        }
+                    })
+                }
+            }();
+            $(".pop-msg").popover({
+                "placement": "bottom",
+                "template": '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
+                "trigger": "manual"
+            });
+            $("#sid").focus();
+            $("#submit").click(function () {
+                $("#errMsg").addClass("invisible");
+                $("#sid").popover("hide");
+                $("#psw").popover("hide");
+                var sid = $("#sid").val();
+                var psw = $("#psw").val();
+                if (!sid) {
+                    $("#sid").popover("show");
+                    $("#sid").focus();
+                } else if (!psw) {
+                    $("#psw").popover("show");
+                    $("#psw").focus();
+                } else {
+                    $("#submit").attr("disabled", true);
+                    $(".loading").attr("hidden", false);
+                    $.post("./api/check", {
+                        "sid": sid,
+                        "psw": psw
+                    }).done(
+                        function (data) {
+                            let stCode = data["e"];
+                            if (stCode == 0) {
+                                $.post("./api/saveid", {
+                                    "sid": sid,
+                                    "psw": psw
+                                }).done(function (data) {
+                                    if (data['e'] == 0) {
+                                        let mdCode = md5(psw, sid);
+                                        if ($("#remember").is(':checked')) {
+                                            $.cookie("id", sid, { expires: 7, path: '/' });
+                                            $.cookie("logined", mdCode, { expires: 7, path: '/' });
+                                        } else {
+                                            $.cookie("id", sid, { path: '/' });
+                                            $.cookie("logined", mdCode, { path: '/' });
+                                        }
+                                        $(location).attr("href", "./index.html");
+                                    }
+                                });
+                            } else if (stCode == 10037) {
+                                var r = confirm("你的身份验证异常,请点击确定按钮,进入官网完成认证");
+                                if (r == true) {
+                                    $(location).attr("href", "http://authserver.nwu.edu.cn/authserver/login");
+                                }
+                            } else {
+                                $("#errMsg").removeClass("invisible");
+                            }
+                        }).always(function () {
+                            setTimeout(function () {
+                                $("#submit").attr("disabled", false);
+                                $(".loading").attr("hidden", true);
+                            }, 800);
+                        })
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

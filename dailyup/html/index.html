@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>晨午检填报</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="favicon.ico" rel="shortcut icon">
+    <style>
+        #navContainer {
+            width: 0;
+            z-index: 10;
+            position: absolute;
+            transition: .8s;
+        }
+
+        #navBt {
+            font-size: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="d-flex vh-100">
+            <div class="w-100 bg-light" id="main">
+                <div class="input-group-prepend text-primary">
+                    <span class="bi-grid ml-3" id="navBt"></span>
+                </div>
+                <div class="px-5 pt-5 d-flex flex-column justify-content-around">
+                    <div class="card align-self-center" style="width: 18rem;">
+                        <div class="card-header">
+                            <!--
+                            <h5 class="card-title">ITEM</h5>
+                            -->
+                            <h6 class="card-subtitle mb-2 text-muted">学号</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text" id="user-id">未定义</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                        </div>
+                    </div>
+                    <div class="card align-self-start" style="width: 18rem;">
+                        <div class="card-header">
+                            <h6 class="card-subtitle mb-2 text-muted">在校状态</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text" id="user-scst">未定义</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                        </div>
+                    </div>
+                    <div class="card align-self-end" style="width: 18rem;">
+                        <div class="card-header">
+                            <h6 class="card-subtitle mb-2 text-muted">填报位置</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text" id="user-geo">未定义</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                        </div>
+                    </div>
+                    <div class="card align-self-center" style="width: 18rem;">
+                        <div class="card-header">
+                            <h6 class="card-subtitle mb-2 text-muted">填报状态</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text" id="user-active">未定义</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="vh-100 bg-light border" id="navContainer">
+                <div class="accordion" id="accordion">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed close" id="navClose" type="button"
+                                    data-toggle="collapse">
+                                    <span aria-hidden="true">&times;</span></button>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    个人主页
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                            data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="nav-item">
+                                    <p class="nav-link disable">
+                                        个人信息
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    信息采集
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <div class="nav-link">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="toggleSchool"
+                                                    data-toggle="buttons">
+                                                <label class="custom-control-label" for="toggleSchool">是否在校</label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="./geoInfo.html">填报位置选择</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    其它
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                            data-parent="#accordion">
+                            <div class="card-body">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <div class="nav-link">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="toggleReport">
+                                                <label class="custom-control-label" for="toggleReport">开启自动填报</label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="logout" href="./login.html">退出登陆</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">提示</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal message.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">确认</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script>
+        $(function () {
+            var isLogin = function () {
+                let id = $.cookie("id");
+                let logined = $.cookie("logined");
+                if (id && logined) {
+                    $.get("./api/islogin").done(function (data) {
+                        if (data["e"] != 0) {
+                            $(location).attr("href", "./login.html");
+                        }
+                    })
+                } else {
+                    $(location).attr("href", "./login.html");
+                }
+            }();
+            $.get("./api/userinfo").done(function (data) {
+                if (data["e"] == 0) {
+                    let d = data["d"];
+                    $("#user-id").text(d["id"]);
+                    if (d["inschool"] == 0) {
+                        $("#user-scst").text("离校中");
+                    } else {
+                        $("#user-scst").text("在校中");
+                        $("#toggleSchool").prop("checked", true);
+                    }
+                    if (d["active"] == 0) {
+                        $("#user-active").text("填报服务未开启");
+                    } else {
+                        $("#user-active").text("填报服务已开启");
+                        $("#toggleReport").prop("checked", true);
+                    }
+                    if (d["geoinfo"]) {
+                        $("#user-geo").text(d["geoinfo"]);
+                    } else {
+                        $("#user-geo").text("尚未提供填报定位信息");
+                    }
+                }
+                else {
+                    showModal("用户信息获取失败，请稍后再试");
+                }
+            })
+            var showModal = function (msg, func) {
+                /* 显示模态对话框 
+                *    msg: 要显示的信息
+                *    func:确认按钮对应的回调,重新调用该函数会清除之前的回调
+                */
+                $(".modal-body p").text(msg);
+                $(".modal-footer .btn-primary").off("click").on("click", func);
+                $('.modal').modal("show");
+            }
+            var hideModal = function () {
+                $('.modal').modal("hide");
+            }
+            var chang = function (field, stat) {
+                $.post("./api/changest", {
+                    "field": field,
+                    "stat": stat
+                }).done(function (data) {
+                    if (data['e'] == 0) {
+                        console.log("操作成功");
+                    } else {
+                        console.log("操作失败");
+                    }
+                }).fail(function () {
+                    console.log("操作失败");
+                });
+            }
+            $("#toggleReport").click(function (event) {
+                if (!$(this).is(':checked')) {
+                    event.preventDefault();
+                    showModal("确认停止自动填报吗？", function () {
+                        $("#toggleReport").prop("checked", false);
+                        chang("active", 0);
+                        $("#user-active").text("填报服务未开启");
+                        hideModal();
+                    });
+                } else {
+                    $("#toggleReport").prop("checked", true);
+                    chang("active", 1);
+                    $("#user-active").text("填报服务已开启");
+                }
+            })
+            $("#toggleSchool").click(function (event) {
+                let stc = function (st, msg) {
+                    event.preventDefault();
+                    showModal(msg, function () {
+                        $("#toggleSchool").prop("checked", st);
+                        if (st) {
+                            chang("inSchool", 1);
+                            $("#user-scst").text("在校中");
+                        } else {
+                            chang("inSchool", 0);
+                            $("#user-scst").text("离校中");
+                        }
+                        hideModal();
+                    })
+                }
+                if ($(this).is(':checked')) {
+                    stc(true, "确认将填报状态改为在校吗？");
+                } else if (!$(this).is(':checked')) {
+                    stc(false, "确认将填报状态改为离校吗？");
+                }
+            })
+            $("#navBt").click(function (event) {
+                $("#navContainer").css("width", "50%");
+            })
+            $("#navClose").click(function () {
+                $("#navContainer").css("width", 0);
+            })
+            $("#logout").click(function (event) {
+                $.cookie('id', null, { path: '/' });
+                $.cookie('logined', null, { path: '/' });
+            })
+        })
+    </script>
+</body>
+
+</html>

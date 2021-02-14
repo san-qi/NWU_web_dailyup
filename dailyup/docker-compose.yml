@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  nwuapp:
+    container_name: "nwuapp"
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+
+  mysqldb:
+    image: "mysql:5.7"
+    environment:
+      MYSQL_ROOT_PASSWORD: "qwertyuiop"
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d/
+
+  nginx:
+    image: "nginx:1.19.6-alpine"
+    ports:
+      - "8082:80"
+    volumes:
+      - ./nginx/dailyup.conf:/etc/nginx/conf.d/dailyup.conf
+      - ./html:/usr/share/nginx/html
