@@ -124,4 +124,4 @@ def report(name, passwd, in_school, geo_api_info, __DEBUG=False):
     r = s.post('https://app.nwu.edu.cn/ncov/wap/open-report/save',
                headers=headers, json=report_data)
     s.close()
-    return r.text
+    return r
